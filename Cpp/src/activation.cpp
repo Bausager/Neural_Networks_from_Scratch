@@ -28,7 +28,7 @@ namespace NN{
 
 
 	}
-	numeric::Md Activation_Softmax::Output(){
+	numeric::Md& Activation_Softmax::Output(){
 		return output;
 	}
 	Activation_Softmax::~Activation_Softmax(){}

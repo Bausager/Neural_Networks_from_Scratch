@@ -25,7 +25,7 @@ namespace NN{
 		Activation_Softmax();
 		~Activation_Softmax();
 		void forward(numeric::Md inputs);
-		numeric::Md Output();
+		numeric::Md& Output();
 	private:
 		numeric::Md output;
 		numeric::Md exp_values;

@@ -65,7 +65,7 @@ namespace numeric{
 			return min_value;
 		}
 
-		double get_sum(){
+		double get_sum() const {
 			double sum_value = 0;
 
 			for (uint64_t i = 0; i < v.size(); i++){
@@ -180,10 +180,11 @@ namespace numeric{
 	//#######################################
 	//#   UTILITY FUNCTIONS FOR VECTOR      #
 	//#######################################
-	double vector_dot(const Vd *const v1, const Vd *const v2);
-	Vd vector_max_cap(const Vd *const vec, const double value);
-	Vd vector_min_cap(const Vd *const vec, const double value);
-	Vd vector_normalize(const Vd *const vec, const double value);
+	void vector_dot(double& dot_product, const Vd *const v1, const Vd *const v2);
+	void vector_max_cap(Vd& vect_out, const Vd *const vec, const double value);
+	void vector_min_cap(Vd& vect_out, const Vd *const vec, const double value);
+	void vector_clip(Vd& vect_out, const Vd *const vect, const double min_value, const double max_value);
+	void vector_normalize(Vd& vect_out, const Vd *const vect, const double value);
 
 	//#######################################
 	//#   UTILITY FUNCTIONS FOR MATRIX      #

@@ -7,12 +7,11 @@ void spiral_data(const uint64_t& points, const uint64_t& classes, numeric::Md& m
 	double r, t;
 	uint64_t row_index;
 
-	for (uint64_t i = 0; i < points; i++){
-		for (uint64_t j = 0; j < classes; j++){
+	for (uint64_t i = 0; i < classes; i++){
+		for (uint64_t j = 0; j < points; j++){
 			r = double(j)/double(points);
 			t = i*4.0 + (4.0+r);
-
-			row_index = (i * classes) + j;
+			row_index = (i * points) + j;
 
 			matr_out.m[row_index].v[0] = r*cos(t*2.5) + numeric::random(-0.15, 0.15);
 			matr_out.m[row_index].v[1] = r*sin(t*2.5) + numeric::random(-0.15, 0.15);

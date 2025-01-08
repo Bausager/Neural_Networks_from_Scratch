@@ -6,47 +6,64 @@ namespace numeric{
 	//#######################################
 	//#   UTILITY FUNCTIONS FOR VECTOR      #
 	//#######################################
-	double vector_dot(const Vd *const v1, const Vd *const v2){
+	void vector_dot(double& dot_product, const Vd *const v1, const Vd *const v2){
 
 		if (v1->v.size() != v2->v.size()){
 			LOG("???");
 			throw std::exception();
 		}
 
-		double dot_product = 0;
+		dot_product = 0;
 
 		for (uint64_t i = 0; i < v1->v.size(); i++)
 		{
 			dot_product += v1->v[i]*v2->v[i];
 		}
-		return dot_product;
 	}
 
-	Vd vector_max_cap(const Vd *const vec, const double value){
-		Vd vec_out;
-		for (uint64_t i = 0; i < vec->v.size(); i++)
+	void vector_max_cap(Vd& vect_out, const Vd *const vect, const double value){
+
+		if (vect_out.v.size() != vect->v.size()){
+			vect_out.fill(vect->v.size(), 0);
+		}		
+
+		for (uint64_t i = 0; i < vect->v.size(); i++)
 		{
-			vec_out.v.push_back(MIN(vec->v[i], value));
+			vect_out.v[i] = MIN(vect->v[i], value);
 		}
-		return vec_out;
 	}
 	
-	Vd vector_min_cap(const Vd *const vec, const double value){
-		Vd vec_out;
-		for (uint64_t i = 0; i < vec->v.size(); i++)
-		{
-			vec_out.v.push_back(MAX(vec->v[i], value));
+	void vector_min_cap(Vd& vect_out, const Vd *const vect, const double value){
+
+		if (vect_out.v.size() != vect->v.size()){
+			vect_out.fill(vect->v.size(), 0);
 		}
-		return vec_out;
+
+		for (uint64_t i = 0; i < vect->v.size(); i++)
+		{
+			vect_out.v[i] = MAX(vect->v[i], value);
+		}
 	}
 
-	Vd vector_normalize(const Vd *const vec, const double value){
-		Vd vec_out;
-		for (uint64_t i = 0; i < vec->v.size(); i++)
-		{
-			vec_out.v.push_back(vec->v[i]/value);
+	void vector_clip(Vd& vect_out, const Vd *const vect, const double min_value, const double max_value){
+
+		if (vect_out.v.size() != vect->v.size()){
+			vect_out.fill(vect->v.size(), 0);
 		}
-		return vec_out;
+
+		for (uint64_t i = 0; i < vect->v.size(); i++){
+			vector_max_cap(vect_out, vect, max_value);
+			vector_min_cap(vect_out, &vect_out, min_value);
+		}
+	}
+
+	void vector_normalize(Vd& vect_out, const Vd *const vect, const double value){
+
+		double vect_sum = vect->get_sum();
+
+		for (uint64_t i = 0; i < vect->v.size(); i++){
+			vect_out.v[i] = vect->v[i]/vect_sum;
+		}
 	}
 
 	//#######################################
@@ -170,8 +187,8 @@ namespace numeric{
 
 		for (uint64_t i = 0; i < M->m.size(); i++){
 			for (uint64_t j = 0; j < M->m[0].v.size(); j++){
-				matr_out.m[i].v[j] = MIN(M->m[i].v[j], min_value);
-				matr_out.m[i].v[j] = MAX(M->m[i].v[j], max_value);
+				matr_out.m[i].v[j] = MAX(M->m[i].v[j], min_value);
+				matr_out.m[i].v[j] = MIN(M->m[i].v[j], max_value);
 			}
 		}
 	}
