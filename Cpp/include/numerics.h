@@ -35,6 +35,18 @@ namespace numeric{
 			}
 		}
 
+		void disturbance(const double min, const double max){
+
+			uint64_t size = v.size();
+
+			std::mt19937_64 rng{}; 
+			rng.seed(std::random_device{}());
+
+			for (uint64_t i = 0; i < size; i++){
+				v[i] *= std::uniform_real_distribution<>{min, max}(rng);
+			}
+		}
+
 		void fill_RNG(const uint64_t size, const double min, const double max){
 			v.clear();
 			
@@ -79,8 +91,6 @@ namespace numeric{
 			return mean_value;
 		}
 
-
-
 		inline friend std::ostream& operator << (std::ostream& out, const Vector& vec){
 			out << "[";
 			for (uint64_t i = 0; i < vec.v.size(); i++)
@@ -121,6 +131,21 @@ namespace numeric{
 			}
 		}
 
+		void disturbance(const double min, const double max){
+
+			uint64_t rows = m.size();
+			uint64_t cols = m[0].v.size();
+
+			std::mt19937_64 rng{}; 
+			rng.seed( std::random_device{}());
+
+			for (uint64_t i = 0; i < rows; i++){
+				for (uint64_t j = 0; j < cols; j++){
+					m[i].v[j] *= std::uniform_real_distribution<>{min, max}(rng);
+				}
+			}
+		}
+
 		void fill_RNG(const uint64_t rows, const uint64_t cols, const double min, const double max){
 				m.clear();
 
@@ -134,7 +159,7 @@ namespace numeric{
 					}
 					m.push_back(temp_vec);
 				}
-			}
+		}
 
 		inline friend std::ostream& operator << (std::ostream& out, const Matrix& mat){
 			out << "[";
@@ -180,27 +205,40 @@ namespace numeric{
 	//#######################################
 	//#   UTILITY FUNCTIONS FOR VECTOR      #
 	//#######################################
-	void vector_dot(double& dot_product, const Vd *const v1, const Vd *const v2);
-	void vector_max_cap(Vd& vect_out, const Vd *const vec, const double value);
-	void vector_min_cap(Vd& vect_out, const Vd *const vec, const double value);
-	void vector_clip(Vd& vect_out, const Vd *const vect, const double min_value, const double max_value);
-	void vector_normalize(Vd& vect_out, const Vd *const vect, const double value);
+	Vd vector_fill_RNG(const Vd& vect, const double min, const double max);
+	double vector_dot(const Vd& v1, const Vd& v2);
+	Vd vector_max_cap(const Vd& vect, const double value);
+	Vd vector_min_cap(const Vd& vect, const double value);
+	Vd vector_clip(const Vd& vect, const double min_value, const double max_value);
+	Vd vector_normalize(const Vd& vect, const double value);
 
 	//#######################################
 	//#   UTILITY FUNCTIONS FOR MATRIX      #
 	//#######################################
-	void matrix_fill_RNG(Md& matr_out, const double min, const double max);
-	void matrix_dot(Md& matr_out, const Md *const M, const Md *const N);
-	void matrix_add_vector(Md& matr_out, const Md *const M, const Vd *const vect, bool axis);
-	void matrix_sub_vector(Md& matr_out, const Md *const M, const Vd *const vect, bool axis);
-	void matrix_max_cap(Md& matr_out, const Md *const M, const double value);
-	void matrix_min_cap(Md& matr_out, const Md *const M, const double value);
-	void matrix_clip(Md& matr_out, const Md *const M, const double min_value, const double max_value);
-	void matrix_get_max(Vd& vect_out, const Md *const M, bool axis);
-	void matrix_get_min(Vd& vect_out, const Md *const M, bool axis);
-	void matrix_get_sum(Vd& vect_out, const Md *const M, bool axis);
-	void matrix_normalize(Md& M, bool axis);
-	void matrix_exp(Md& M);
+	Md matrix_dot(const Md& M, const Md& N);
+	Md matrix_add_vector(const Md& M, const Vd& vect, bool axis);
+	Md matrix_add_matrix(const Md& M, const Md& N);
+	Md matrix_sub_vector(const Md& M, const Vd& vect, bool axis);
+
+	Md matrix_max_cap(const Md& M, const double value);
+	Md matrix_min_cap(const Md& M, const double value);
+
+	Md matrix_clip(const Md& M, const double min_value, const double max_value);
+	Vd matrix_get_max(const Md& M, bool axis);
+	Vd matrix_get_min(const Md& M, bool axis);
+
+	Vd matrix_get_sum(const Md& M, bool axis);
+
+	Md matrix_normalize(const Md& M, bool axis);
+	Md matrix_exp(const Md& M);
+	Vd matrix_argmax(const Md& M);
+	Md matrix_transpose(const Md& M);
+	double matrix_determinant(const Md& M);
+	Md matrix_cofactor(const Md& M);
+	Md matrix_inverse(const Md& M);
+	Md matrix_scalar_element_wise_division(const Md& M, const double& C);
+	Md matrix_element_wise_division(const Md& M, const Md& N);
+	Md matrix_sign(const Md& M);
 
 
 

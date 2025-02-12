@@ -6,11 +6,24 @@ namespace NN{
 	//#          Activation_ReLU            #
 	//#######################################
 	Activation_ReLU::Activation_ReLU(){}
+
+
+
 	void Activation_ReLU::forward(numeric::Md inputs){
-		numeric::matrix_min_cap(output, &inputs, 0);
+		_inputs = inputs;
+		_outputs = numeric::matrix_min_cap(_inputs, 0);
 	}
-	numeric::Md Activation_ReLU::Output(){
-		return output;
+
+	void Activation_ReLU::backward(numeric::Md dvalues){
+		_dinputs = dvalues;
+		_dinputs = numeric::matrix_min_cap(_dinputs, 0);
+	}
+
+
+
+
+	numeric::Md Activation_ReLU::get_output(){
+		return _outputs;
 	}
 	Activation_ReLU::~Activation_ReLU(){}
 
@@ -19,17 +32,23 @@ namespace NN{
 	//#######################################
 	Activation_Softmax::Activation_Softmax(){}
 	void Activation_Softmax::forward(numeric::Md inputs){
-		numeric::matrix_get_max(max_values, &inputs, 1);
-		numeric::matrix_sub_vector(exp_values, &inputs, &max_values, 1);
-		numeric::matrix_exp(exp_values);
+		_inputs = inputs;
+		_vector_temp = numeric::matrix_get_max(_inputs, 1);
+		_matrix_temp = numeric::matrix_sub_vector(_inputs, _vector_temp, 1);
+		_matrix_temp = numeric::matrix_exp(_matrix_temp);
 
-		numeric::matrix_normalize(exp_values, 1);
-		output = exp_values;
-
-
+		_outputs = numeric::matrix_normalize(_matrix_temp, 1);
 	}
-	numeric::Md& Activation_Softmax::Output(){
-		return output;
+
+	void Activation_Softmax::backward(numeric::Md dvalues){
+		_dinputs.fill(dvalues.m.size(), dvalues.m[0].v.size(), 0);
+		
+	}
+
+
+
+	numeric::Md& Activation_Softmax::get_output(){
+		return _outputs;
 	}
 	Activation_Softmax::~Activation_Softmax(){}
 

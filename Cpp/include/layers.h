@@ -10,15 +10,29 @@ namespace NN{
 		~Layer_Dense();
 
 		void forward(numeric::Md inputs);
+		void backward(numeric::Md dvalues);
 
 
-		numeric::Md Output();
+		numeric::Md get_output();
+		numeric::Md get_weights();
+		numeric::Vd get_biases();
+
+		void set_weights(const numeric::Md& new_weights);
+		void set_biases(const numeric::Vd& new_biases);
+
 
 	private:
-		numeric::Md weights;
-		numeric::Vd biases;
-		numeric::Md output;
-		numeric::Md dot_product;
+		numeric::Md _weights;
+		numeric::Md _dweights;
+		numeric::Vd _biases;
+		numeric::Vd _dbiases;
+
+		numeric::Md _inputs;
+		numeric::Md _dinputs;
+		numeric::Md _output;
+
+		numeric::Md _matrix_temp;
+		numeric::Vd _vector_temp;
 	};
 }
 

@@ -10,9 +10,10 @@ namespace NN{
 		Loss() = default; // <- delete default if you intend to write the constructor's implementation
 		virtual ~Loss() = default;
 
-		void calculate(const numeric::Md *const y_pred, const numeric::Md *const y);
+		void calculate(const numeric::Md& y_pred, const numeric::Md& y);
 
-		virtual void forward(const numeric::Md *const y_pred, const numeric::Md *const y_true) = 0;
+		virtual void forward(const numeric::Md& y_pred, const numeric::Md& y_true) = 0;
+		virtual void backward(const numeric::Md& dvalue, const numeric::Md& y_true) = 0;
 
 	private:
 		numeric::Md data_loss;
@@ -26,12 +27,17 @@ namespace NN{
 		~Loss_CategoricalCrossentropy() override = default;
 
 
-		void forward(const numeric::Md *const y_pred, const numeric::Md *const y_true) override;
-		double& Output();
+		void forward(const numeric::Md& y_pred, const numeric::Md& y_true) override;
+		void backward(const numeric::Md& dvalue, const numeric::Md& y_true) override;
+
+		double& get_output();
+
 	private:
-		numeric::Md data_loss;
-		numeric::Vd vect_helper;
-		double loss;
+
+		double _loss;
+		numeric::Md _dinputs;
+		numeric::Md _matrix_temp;
+		numeric::Vd _vector_temp;
 	};
 }
 

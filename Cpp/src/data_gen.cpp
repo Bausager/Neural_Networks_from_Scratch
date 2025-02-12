@@ -19,3 +19,23 @@ void spiral_data(const uint64_t& points, const uint64_t& classes, numeric::Md& m
 		}
 	}
 }
+
+
+void vertical_data(const uint64_t& points, const uint64_t& classes, numeric::Md& matr_out, numeric::Vd& vec_out){
+	matr_out.fill(points*classes, 2, 0);
+	vec_out.fill(points*classes, 0);
+	
+	uint64_t row_index;
+
+	for(uint64_t i = 0; i < classes; i++){
+		for (uint64_t j = 0; j < points; j++){
+
+			row_index = (i * points) + j;
+
+			matr_out.m[row_index].v[0] = i/classes + numeric::random(-0.1, 0.1);
+			matr_out.m[row_index].v[1] = 0.5 + numeric::random(-0.5, 0.5);
+
+			vec_out.v[row_index] = i;
+		}
+	}
+}
